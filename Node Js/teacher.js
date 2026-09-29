@@ -3,6 +3,7 @@ const Teachers = require("./teacherModel.js");
 const express = require("express");
 const router = express.Router();
 const checkRole = require('./role_middleware');
+
 let teachers = [
     {
         id: 1,

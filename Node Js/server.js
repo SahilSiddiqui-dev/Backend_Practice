@@ -6,8 +6,9 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-const mangoosConnect  = async () => {
+const mongooseConnect  = async () => {
   try {
+    console.log("Connecting to MongoDB...");
     await mongoose.connect(process.env.MONGODB_URI);
     console.log("Connected to MongoDB");
   }
@@ -17,7 +18,7 @@ const mangoosConnect  = async () => {
   }
 }
 
-mangoosConnect();
+mongooseConnect();
 
 app.get('/', (req, res) => {
   return res.send('Welcome to the API');
