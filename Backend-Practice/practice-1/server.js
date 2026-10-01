@@ -1,6 +1,8 @@
 require('dotenv').config(); // always on first line of the server.js file
 const express = require('express');
 const connectDB = require('./config/db');
+const instructor = require('./models/instructor');
+
 const app = express();
 const PORT = process.env.PORT || 8000;
 
