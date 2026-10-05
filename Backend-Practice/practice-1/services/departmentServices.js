@@ -1,27 +1,49 @@
 const Department = require('../models/department');
-
+const AppError = require('./utils/AppError');
 
 // Service functions for department operations
 exports.createDepartmentService = async ({name, code, description}) => {
-    const departmentExist = await Department.findOne({code : code.toUpperCase()});
-    if(!departmentExist) {
-        return await Department.create({name, code, description});
+    const departmentExist = await Department.findOne({ 
+        $or : [
+        {code : code.trim().toUpperCase()},
+        {name : name.trim()}
+    ]
+});
+    if(departmentExist) {
+        throw new AppError("Department Already Exists", 409);
     }
-    throw new Error('Department with this code already exists');
+    return await Department.create({name, code, description});
 }
 
 // Service function to get all departments
 exports.getAllDepartmentsService = async() => {
-    return await Department.find().Sort({name : 1});
-    
+    return await Department.find().sort({name : 1});
 }
 
 // Service function to get department by Id
-exports.getDepartentById = async() => {
-    const deparmentExist = await Department.findById(req.params.id);
-    if(!deparmentExist) {
-        throw new Error(`Department Not Found with this ${req.params.id}`);
+exports.getDepartmentById = async(id) => {
+    const departmentExist = await Department.findById(id);
+    if(!departmentExist) {
+        throw new AppError(`Department with this ${id} was not found`, 404)
     }
-    return deparmentExist;
+    return departmentExist;
+}
+
+// Service function to update department by Id
+exports.updateDepartmentById = async(id, description) => {
+    
+    if(typeof description !== "string" || description.trim().length <= 0) {
+    return res.status(400).json({
+        success : false,
+        message : "Please provide a valid description"
+        })
+    }
+
+    const departmentExist = await Department.findById(id);
+    if(!departmentExist) {
+        throw new AppError(`Department with this ${id} was not found`, 404)
+    }
+    const department = await Department.updateby
+    departmentExist.
 }
 
