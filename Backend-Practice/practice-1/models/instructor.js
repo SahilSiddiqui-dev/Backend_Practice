@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const instructorSchema = new mongoose.Schema({
     fullName : {
         type : String,
@@ -25,7 +24,7 @@ const instructorSchema = new mongoose.Schema({
     },
     department : {
         type : mongoose.Schema.Types.ObjectId,
-        ref : 'departmentSchema',
+        ref : 'Department',
         required : [true, "Instructor must belong to department"]
     },
 
@@ -36,5 +35,4 @@ const instructorSchema = new mongoose.Schema({
 },  
     {timestamps : true} 
 )
-
-module.exports = mongoose.model('instructor', instructorSchema);
+module.exports = mongoose.model('Instructor', instructorSchema);
