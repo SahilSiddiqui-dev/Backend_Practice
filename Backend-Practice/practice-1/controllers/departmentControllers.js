@@ -1,9 +1,9 @@
 const Department = require('../models/department');
 const asyncHandler = require('../utils/asyncHandler');
+const controllerServices = require('../services/departmentServices');
 
 //@desc: Create a new department
 //@route: POST /api/department
-
 exports.createDepartment = asyncHandler(async(req, res) => {
     const { name, code, description } = req.body;
     if(!name || !code || !description) {
@@ -34,7 +34,6 @@ exports.createDepartment = asyncHandler(async(req, res) => {
 
 //@desc Get all departments
 //@route GET /api/department
-
 exports.getAllDepartments  = asyncHandler(async(req, res) => {
 const departments = await Department.find().sort({name : 1});
 
@@ -47,7 +46,6 @@ res.status(200).json({
 
 //@desc GET department by Id
 //@route GET /api/department/:Id
-
 exports.getDepartmentById = asyncHandler(async(req, res) => {
     const department = await Department.findById(req.params.id);
 
