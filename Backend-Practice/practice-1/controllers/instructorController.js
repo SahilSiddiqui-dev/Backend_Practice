@@ -1,6 +1,5 @@
-const Instructor = require('../models/instructor');
 const asyncHandler = require('../utils/asyncHandler');
-const Department = require('../models/department');
+const instructorServices = require('../services/instructorServices');
 
 //@desc Create Instructor
 //@route Post /api/instructor
@@ -8,20 +7,7 @@ const Department = require('../models/department');
 exports.createInstructor = asyncHandler(async (req, res) => {
     const {fullName, email, designation, department} = req.body;
 
-    const departmentExists = await Department.findById(department);
-    if(!departmentExists){
-        return res.status(400).json({
-            success : false,
-            message : `Cannot assign instructor: ${department} does not exists`
-        })
-    }
-
-    const instructor = await Instructor.create({
-        fullName,
-        email,
-        designation,
-        department
-    });
+    const instructor = await instructorServices.createInstructorService({fullName, email, designation, department});
 
     res.status(201).json({
         success : true,
@@ -32,9 +18,7 @@ exports.createInstructor = asyncHandler(async (req, res) => {
 // @desc   Get all instructors
 // @route  Get /api/instructor
 exports.getAllInstructors = asyncHandler(async (req, res) => {
-    const instructor = await Instructor.find({isActive : true})
-    .populate('department', 'name code')
-    .sort({createdAt : -1});
+    const instructor = await instructorServices.getAllInstructorService();
 
     res.status(200).json({
         success : true,
@@ -51,18 +35,8 @@ exports.getAllInstructors = asyncHandler(async (req, res) => {
 exports.deactivateInstructor = asyncHandler(async (req, res) => {
     const {id} = req.params;
 
-    const instructor = await Instructor.findByIdAndUpdate(
-        id,
-        {isActive : false},
-        {new : true}
-    );
-
-    if(!instructor) {
-        return res.status(404).json({
-            success : false,
-            message :  `Instructor with ${id} is not found`
-        })
-    };
+    const instructor = await instructorServices.deactivateInstructorById(id); 
+    
     res.status(200).json({
         success : true,
         message : "Instructor is deactivated Successfully",
