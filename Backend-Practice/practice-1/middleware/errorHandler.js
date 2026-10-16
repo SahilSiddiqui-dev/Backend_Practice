@@ -2,7 +2,11 @@ const errorHandler = (err, req, res, next) => {
     let statusCode = 500;
     let message = "Internal Server Error";
 
-    if (err.name === "CastError") {
+    if(err.statusCode) {
+        statusCode = err.statusCode;
+        message = err.message;
+    }
+      else if (err.name === "CastError") {
         statusCode = 400;
         message = `Invalid ${err.path}`;
     } else if (err.name === "ValidationError") {
@@ -16,7 +20,7 @@ const errorHandler = (err, req, res, next) => {
         console.error(err);
     }
 
-    res.status(statusCode).json({ success: false, message });
+    res.status(statusCode).json({ success: false, message : message });
 };
 
 module.exports = errorHandler;

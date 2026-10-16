@@ -4,6 +4,6 @@ const { createInstructor, getAllInstructors, deactivateInstructor } = require('.
 
 router.post('/', createInstructor);
 router.get('/', getAllInstructors);
-router.delete('/:id', deactivateInstructor);    
+router.delete('/:id', deactivateInstructor); 
 
 module.exports = router;

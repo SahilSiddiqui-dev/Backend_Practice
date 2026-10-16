@@ -18,7 +18,7 @@ const instructorSchema = new mongoose.Schema({
         required : true,
         enum : {
             values : ['Professor', 'Assistant Professor', 'HOD',  'Associate Professor'],
-            message : "{Value} is not valid designation"
+            message : "Provided designation is not valid"
         },
         default: 'Assistant Professor'
     },
