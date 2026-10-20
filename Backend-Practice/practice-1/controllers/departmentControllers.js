@@ -1,30 +1,12 @@
-const Department = require('../models/department');
 const asyncHandler = require('../utils/asyncHandler');
-const controllerServices = require('../services/departmentServices');
+const departmentServices = require('../services/departmentServices');
 
 //@desc: Create a new department
 //@route: POST /api/department
 exports.createDepartment = asyncHandler(async(req, res) => {
     const { name, code, description } = req.body;
-    if(!name || !code || !description) {
-        return res.status(400).json({
-            success : false,
-            message : "Please provide all required fields"
-        })
-    }
-    // checking if department already exists
-    const existsDep = await Department.findOne({
-        $or : [{code : code.toUpperCase()}, {name}]
-    });
 
-    if(existsDep) {
-        return res.status(409).json({
-            success : false,
-            message : "Department with this name or code already exists"
-        })
-    };
-
-    const department = await Department.create({name, code, description});
+    const department = await departmentServices.createDepartmentService({name, code, description});
 
     res.status(201).json({
         success : true,
@@ -32,29 +14,20 @@ exports.createDepartment = asyncHandler(async(req, res) => {
     });
 })
 
-//@desc Get all departments
+//@desc Get all department
 //@route GET /api/department
-exports.getAllDepartments  = asyncHandler(async(req, res) => {
-const departments = await Department.find().sort({name : 1});
+exports.getAllDepartment = asyncHandler(async(req, res) => {
+    const { page, limit } = req.query;
 
-res.status(200).json({
-    success : true,
-    count : departments.length,
-    data : departments
-    })
+    const result = await departmentServices.getAllDepartmentService({page, limit});
+
+    res.status(200).json({ success : true, ...result })
 })
 
-//@desc GET department by Id
-//@route GET /api/department/:Id
+//@desc Get a department by id
+//@route GET /api/department/:id
 exports.getDepartmentById = asyncHandler(async(req, res) => {
-    const department = await Department.findById(req.params.id);
-
-    if(!department) {
-        return res.status(404).json({
-            success : false,
-            message : `Department Not Found with this ${req.params.id}`
-        })
-    }
+    const department = await departmentServices.getDepartmentById(req.params.id);
 
     res.status(200).json({
         success : true,
@@ -63,26 +36,14 @@ exports.getDepartmentById = asyncHandler(async(req, res) => {
 
 })
 
+
+
 //@desc Update department by Id
 //@route Patch /api/department/:Id
 exports.updateDepartmentById = asyncHandler(async(req , res) => {
     const { description } = req.body;
-    if(typeof description !== "string" || description.trim().length <= 0) {
-    return res.status(400).json({
-        success : false,
-        message : "Please provide a valid description"
-        })
-    }
-
-    const department = await Department.findByIdAndUpdate(req.params.id, {description}, {new : true, runValidators : true});
-
-    if(!department) {
-        return res.status(404).json({
-            success : false,
-            message : `Department Not Found with this ${req.params.id}`
-        })
-    }
-
+    const id = req.params.id;
+    const department = await departmentServices.updateDepartmentById(id, description);
     res.status(200).json({
         success : true,
         data : department
