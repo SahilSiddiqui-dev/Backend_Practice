@@ -4,6 +4,7 @@ const isValid = require('../utils/isValidString');
 const isValidNumber = require('../utils/isValidNumber');
 const AppError = require('../utils/AppError');
 const mongoose = require('mongoose');
+const escapeRegex = require('../utils/escapeRegex');
 
 // service for creating instructor
 exports.createInstructorService = async({fullName, email, designation, department}) => {
@@ -24,7 +25,7 @@ exports.createInstructorService = async({fullName, email, designation, departmen
 }
 
 // service for getting all instructors
-exports.getAllInstructorService = async({page, limit, designation, department, fullName, email}) => {
+exports.getAllInstructorService = async({page, limit, designation, department, search}) => {
     let pageNumber = page === undefined ? 1 : Number(page);
     let limitNumber = limit === undefined ? 10 : Number(limit);
 
@@ -54,6 +55,18 @@ exports.getAllInstructorService = async({page, limit, designation, department, f
         } else {
             throw new AppError("Please Provide Valid Designation", 400);
         }
+    }
+    if(search !== undefined) {
+       if(typeof search !== 'string' || search.trim().length === 0) {
+        throw new AppError('search is not valid', 400);
+       }
+
+       const escapedSearch = escapeRegex(search.trim());
+
+       filter.$or = [
+        {fullName : {$regex : escapedSearch, $options : 'i'}},
+        {email : {$regex : escapedSearch, $options : 'i'}}
+       ]
     }
 
     const instructors = await Instructor.find(filter).populate('department', 'name code').sort({createdAt : -1, _id: -1}).skip(skip).limit(limitNumber);
