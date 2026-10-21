@@ -1,5 +1,6 @@
 const asyncHandler = require('../utils/asyncHandler');
 const instructorServices = require('../services/instructorServices')
+
 //@desc Create Instructor
 //@route Post /api/instructor
 
@@ -17,9 +18,9 @@ exports.createInstructor = asyncHandler(async (req, res) => {
 // @desc   Get all instructors
 // @route  Get /api/instructor
 exports.getAllInstructors = asyncHandler(async (req, res) => {
-    const {page, limit, designation, department, fullName, email} = req.query;
+    const {page, limit, designation, department, search} = req.query;
 
-    const instructor = await instructorServices.getAllInstructorService({page, limit, designation, department, fullName, email});
+    const instructor = await instructorServices.getAllInstructorService({page, limit, designation, department, search});
 
     res.status(200).json({
         success : true,

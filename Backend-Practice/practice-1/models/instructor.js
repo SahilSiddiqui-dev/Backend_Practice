@@ -35,4 +35,8 @@ const instructorSchema = new mongoose.Schema({
 },  
     {timestamps : true} 
 )
+
+//index(fiels, options) => to make unique index on multiple fields
+instructorSchema.index({isActive :1, designation : 1, createdAt : -1, _id : -1}, {unique : true});
+
 module.exports = mongoose.model('Instructor', instructorSchema);
