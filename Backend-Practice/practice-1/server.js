@@ -3,6 +3,7 @@ const express = require('express');
 const connectDB = require('./config/db');
 const instructorRoutes = require('./routes/instructorRoutes');
 const departmentRoutes = require('./routes/departmentRoutes');
+const userRoutes = require('./routes/userRoutes')
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
@@ -25,6 +26,7 @@ app.get('/', (req, res) => {
     res.status(200).json({message : "Server is Good and running too"});
 })
 
+app.use('/api/auth', userRoutes);
 app.use('/api/instructors', instructorRoutes);
 app.use('/api/departments', departmentRoutes);
 
