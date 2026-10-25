@@ -17,6 +17,6 @@ exports.register = async ({username, email, password}) => {
         email : email,
         password : hashedPassword
     })
-
+    
     return user;
 }
