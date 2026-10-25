@@ -1,4 +1,4 @@
-const asyncHandler = require('../middleware/asyncHandler')
+const asyncHandler = require('../utils/asyncHandler')
 const authService = require('../services/authService')
 
 exports.register = asyncHandler(async (req, res) => {
@@ -7,6 +7,7 @@ exports.register = asyncHandler(async (req, res) => {
     const user = await authService.register({username, email, password});
 
     const newUser = {
+        _id : user._id,
         username : user.username,
         email : user.email,
         role : user.role
