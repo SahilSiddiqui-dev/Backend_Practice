@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const Login = require('../models/login');
 const AppError = require('../utils/AppError')
 const bcrypt = require('bcrypt');
 
@@ -17,6 +18,22 @@ exports.register = async ({username, email, password}) => {
         email : email,
         password : hashedPassword
     })
-    
+
     return user;
+}
+
+exports.loginService = async({email, password}) => {
+
+    const user = await User.findOne({email}).select('+password');
+
+    if(!user) {
+        throw new AppError('Invalid email or password', 401)
+    }
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if(!isMatch) {
+        throw new AppError('Invalid email or password', 401);
+    }
+
+
 }
