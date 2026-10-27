@@ -8,6 +8,8 @@ const escapeRegex = require('../utils/escapeRegex');
 
 // service for creating instructor
 exports.createInstructorService = async({fullName, email, designation, department}) => {
+
+
     if(!isValid(fullName) || !isValid(email) || !isValid(designation) || !isValid(department)){
         throw new AppError("Please Provide Valid Inputs", 400);
     }
@@ -80,6 +82,7 @@ exports.getAllInstructorService = async({page, limit, designation, department, s
     limit : limitNumber,
     totalPages : totalPages
    }
+
 }
 
 //service for deactivating an instructor
