@@ -2,6 +2,8 @@ const User = require('../models/user');
 const Login = require('../models/login');
 const AppError = require('../utils/AppError')
 const bcrypt = require('bcrypt');
+const {getToken, getRefreshToken} = require('../utils/getToken')
+const setRefreshCookie = require('../utils/setRefreshCookie')
 
 exports.register = async ({username, email, password}) => {
 
@@ -35,5 +37,17 @@ exports.loginService = async({email, password}) => {
         throw new AppError('Invalid email or password', 401);
     }
 
+    const token = getToken(user);
 
+    const refreshToken = getRefreshToken(user);
+
+    return {
+        refreshToken : refreshToken,
+        token : token,
+        user : {_id : user._id,
+                username : user.username,
+                email : user.email,
+                role : user.role
+            }
+        }
 }
