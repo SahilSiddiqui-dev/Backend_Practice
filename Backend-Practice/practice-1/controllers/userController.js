@@ -2,6 +2,7 @@ const asyncHandler = require('../utils/asyncHandler')
 const authService = require('../services/authService')
 const setRefreshCookie = require('../utils/setRefreshCookie')
 const AppError = require('../utils/AppError');
+const clearCookie = require('../utils/clearCookie')
 
 exports.register = asyncHandler(async (req, res) => {
     const {username, email, password} = req.body;
@@ -62,4 +63,23 @@ exports.refresh = asyncHandler(async(req, res) => {
         success : true,
         token : token
     })
-}) 
+})
+
+exports.logout = (req, res) => {
+    const {refreshToken}  = req.cookies;
+
+    if(!refreshToken) {
+        return res.status(200).json({
+            success : true,
+            message : 'Already Logged Out'
+        })
+    }
+
+    clearCookie(res);
+
+    res.status(200).json({
+        success : true,
+        message : 'Logged Out'
+    })
+
+}
