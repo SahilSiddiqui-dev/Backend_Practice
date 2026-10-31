@@ -1,6 +1,7 @@
 const asyncHandler = require('../utils/asyncHandler')
 const authService = require('../services/authService')
 const setRefreshCookie = require('../utils/setRefreshCookie')
+const AppError = require('../utils/AppError');
 
 exports.register = asyncHandler(async (req, res) => {
     const {username, email, password} = req.body;
@@ -53,12 +54,12 @@ exports.refresh = asyncHandler(async(req, res) => {
     if(!refreshToken) {
         throw new AppError('Refresh token is missing', 401);
     }
-    const {accessToken, newRefreshToken} = await authService.refreshService({refreshToken});
+    const {token, newRefreshToken} = await authService.refreshService({refreshToken});
 
     setRefreshCookie(res, newRefreshToken);
 
     res.status(200).json({
         success : true,
-        accessToken : accessToken
+        token : token
     })
 }) 

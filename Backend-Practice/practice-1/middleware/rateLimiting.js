@@ -1,5 +1,2 @@
-const rateLimiting = (req, res, next) => {
-    const ip = req.ip;
-
-
-}
+// const rateLimiting = (req, res, next) => {
+//     const ip = req.ip;

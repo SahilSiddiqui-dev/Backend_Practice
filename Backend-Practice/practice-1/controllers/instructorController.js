@@ -22,8 +22,8 @@ exports.getAllInstructors = asyncHandler(async (req, res) => {
     // const {page, limit, designation, department, search} = req.query;
     const {limit, cursor} = req.query;
 
-    //const instructor = await instructorServices.getAllInstructorService({page, limit, designation, department, search});
-    const instructor = await instructorService.getAllInstructors({limit, cursor});
+    const instructor = await instructorServices.getAllInstructorService({page, limit, designation, department, search});
+    
 
     res.status(200).json({
         success : true,
