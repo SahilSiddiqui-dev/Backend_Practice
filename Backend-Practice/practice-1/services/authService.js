@@ -1,10 +1,8 @@
 const User = require('../models/user');
-const Login = require('../models/login');
 const AppError = require('../utils/AppError')
 const bcrypt = require('bcrypt');
 const {getToken, getRefreshToken} = require('../utils/getToken')
-const setRefreshCookie = require('../utils/setRefreshCookie');
-const { jwt } = require('zod');
+const jwt  = require('jsonwebtoken');
 
 exports.register = async ({username, email, password}) => {
 
@@ -45,7 +43,7 @@ exports.loginService = async({email, password}) => {
     return {
         refreshToken : refreshToken,
         token : token,
-        user : {_id : user._id,
+        user : {_id : user.id,
                 username : user.username,
                 email : user.email,
                 role : user.role
@@ -60,22 +58,22 @@ exports.refreshService = async({refreshToken}) => {
     try {
         payload = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
     }
-    catch {
+    catch (err) {
         throw new AppError('Cant get the refresh Token', 401);
     }
 
-    const user = await User.findById(payload.id);
+    const user = await User.findById(payload._id);
 
     if(!user) {
         throw new AppError('User not found', 401);
     }
 
     const newRefreshToken = getRefreshToken(user);
-    const accessToken = getToken(user);
+    const token = getToken(user);
 
     return {
-        newRefreshToken : newRefreshToken,
-        accessToken : accessToken
+        token : token,
+        newRefreshToken : newRefreshToken
     }
 
 }

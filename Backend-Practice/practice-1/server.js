@@ -1,6 +1,7 @@
 require('dotenv').config(); // always on first line of the server.js file
 const express = require('express');
 const connectDB = require('./config/db');
+const cookieParser = require('cookie-parser')
 const validateJwtConfig = require('./config/validateJwtConfig');
 const validateRefreshConfig = require('./config/validateRefreshConfig');
 const instructorRoutes = require('./routes/instructorRoutes');
@@ -11,11 +12,11 @@ const errorHandler = require('./middleware/errorHandler');
 const app = express();
 const PORT = process.env.PORT || 8000;
 
-const limit = ratelimit({
-    windowMs:15*60*1000,
-    max:15,
-    message : "You have exceeded hit limits of API"
-})
+// const limit = ratelimit({
+//     windowMs:15*60*1000,
+//     max:15,
+//     message : "You have exceeded hit limits of API"
+// })
 
 // Connect to MongoDB
 const startServer = async() => {
@@ -33,7 +34,7 @@ app.use(cookieParser()); // Middleware to parse cookies
 // Middleware to parse JSON requests
 app.use(express.json());
 
-app.use(limit);
+//app.use(limit);
 
 app.get('/', (req, res) => {
     res.status(200).json({message : "Server is Good and running too"});
