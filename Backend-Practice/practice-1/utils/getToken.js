@@ -3,7 +3,7 @@ const  jwt = require('jsonwebtoken');
 const getToken = user => {
     return jwt.sign(
         {
-        id : user._id,
+        _id : user._id,
         role : user.role
         },
 
@@ -18,7 +18,7 @@ const getToken = user => {
 const  getRefreshToken = user => {
     return jwt.sign(
         {
-            id:user._id,
+        _id : user._id,
             role: user.role
         },
 
