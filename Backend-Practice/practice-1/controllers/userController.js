@@ -83,3 +83,10 @@ exports.logout = (req, res) => {
     })
 
 }
+
+exports.adminOnly = (req, res) => {
+
+    res.status(200).json({
+        message: "Welcome Admin"
+    })
+}
