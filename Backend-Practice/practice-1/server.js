@@ -4,6 +4,8 @@ const connectDB = require('./config/db');
 const cookieParser = require('cookie-parser')
 const validateJwtConfig = require('./config/validateJwtConfig');
 const validateRefreshConfig = require('./config/validateRefreshConfig');
+const helmet = require('helmet');
+const cors = require('cors');
 const instructorRoutes = require('./routes/instructorRoutes');
 const departmentRoutes = require('./routes/departmentRoutes');
 const userRoutes = require('./routes/userRoutes')
@@ -30,9 +32,15 @@ const startServer = async() => {
 }
 startServer();
 
+app.use(helmet());
+
+app.use(cors({origin : process.env.CLIENT_URL, Credential : true}))
+
 app.use(cookieParser()); // Middleware to parse cookies
 // Middleware to parse JSON requests
-app.use(express.json());
+
+app.use(express.json({limit : '10kb'}));
+
 
 //app.use(limit);
 
