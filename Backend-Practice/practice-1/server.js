@@ -6,6 +6,7 @@ const validateJwtConfig = require('./config/validateJwtConfig');
 const validateRefreshConfig = require('./config/validateRefreshConfig');
 const helmet = require('helmet');
 const cors = require('cors');
+const {apiLimiter} = require('./middleware/rateLimiter')
 const instructorRoutes = require('./routes/instructorRoutes');
 const departmentRoutes = require('./routes/departmentRoutes');
 const userRoutes = require('./routes/userRoutes')
@@ -42,7 +43,7 @@ app.use(cookieParser()); // Middleware to parse cookies
 app.use(express.json({limit : '10kb'}));
 
 
-//app.use(limit);
+app.use(apiLimiter);
 
 app.get('/', (req, res) => {
     res.status(200).json({message : "Server is Good and running too"});

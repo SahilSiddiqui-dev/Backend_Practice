@@ -21,7 +21,6 @@ exports.createInstructor = asyncHandler(async (req, res) => {
 exports.getAllInstructors = asyncHandler(async (req, res) => {
     const {page, limit, designation, department, search} = req.query;
     
-
     const instructor = await instructorServices.getAllInstructorService({page, limit, designation, department, search});
     
 
