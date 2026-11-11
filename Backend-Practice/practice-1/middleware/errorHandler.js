@@ -6,17 +6,24 @@ const errorHandler = (err, req, res, next) => {
         statusCode = err.statusCode;
         message = err.message;
     }
-      else if (err.name === "CastError") {
+    
+    else if (err.name === "CastError") {
         statusCode = 400;
         message = `Invalid ${err.path}`;
-    } else if (err.name === "ValidationError") {
+    } 
+    
+    else if (err.name === "ValidationError") {
         statusCode = 400;
         message = Object.values(err.errors).map((e) => e.message).join(", ");
-    } else if (err.code === 11000) {
+    } 
+    
+    else if (err.code === 11000) {
         statusCode = 409;
         const field = Object.keys(err.keyValue)[0];
         message = `${field} already exists`;
-    } else {
+    }
+    
+    else {
         console.error(err);
     }
 
