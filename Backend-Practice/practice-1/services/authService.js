@@ -5,7 +5,7 @@ const {getToken, getRefreshToken} = require('../utils/getToken')
 const jwt  = require('jsonwebtoken');
 
 exports.register = async ({username, email, password}) => {
-
+    
     const userExists = await User.findOne({email : email});
 
     if(userExists) {
@@ -24,7 +24,7 @@ exports.register = async ({username, email, password}) => {
 }
 
 exports.loginService = async({email, password}) => {
-
+    
     const user = await User.findOne({email}).select('+password');
 
     if(!user) {
